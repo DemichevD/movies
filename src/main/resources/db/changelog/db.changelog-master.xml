@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <changeSet id="create_schema" author="DemichevDA">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS movies;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_director_table" author="DemichevDA">
+        <createTable tableName="director" schemaName="movies" remarks="Режиссеры">
+            <column name="director_id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)" remarks="Фамилия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="second_name" type="varchar(255)" remarks="Имя">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="varchar(255)" remarks="Отчество">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year_of_birth" type="int" remarks="Год рождения">
+                <constraints nullable="true"/>
+            </column>
+            <column name="biography" type="clob" remarks="Биография">
+                <constraints nullable="true"/>
+            </column>
+            <column name="country" type="varchar(50)" remarks="Страна">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_movie_table" author="DemichevDA">
+        <createTable tableName="movie" schemaName="movies" remarks="Фильмы">
+            <column name="movie_id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="movie_title" type="varchar(255)" remarks="Название фильма">
+                <constraints nullable="false"/>
+            </column>
+            <column name="movie_year" type="int" remarks="Год"/>
+            <column name="description"
+                    type="clob"/>
+            <column name="director_id"
+                    type="bigserial"/>
+            <column name="rating"
+                    type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_actor_table" author="DemichevDA">
+        <createTable tableName="actor" schemaName="movies" remarks="Актеры">
+            <column name="actor_id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)" remarks="Фамилия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="second_name" type="varchar(255)" remarks="Имя">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_name" type="varchar(255)" remarks="Отчество">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year_of_birth" type="int" remarks="Год рождения">
+                <constraints nullable="true"/>
+            </column>
+            <column name="biography" type="clob" remarks="Биография">
+                <constraints nullable="true"/>
+            </column>
+            <column name="country" type="varchar(50)" remarks="Страна">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="create_genre_table" author="DemichevDA">
+        <createTable tableName="genre" schemaName="movies" remarks="Жанры">
+            <column name="genre_id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Название">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_role_table" author="DemichevDA">
+        <createTable tableName="role" schemaName="movies" remarks="Роли">
+            <column name="role_id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)" remarks="Название">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_user_table" author="DemichevDA">
+        <createTable tableName="user" schemaName="movies" remarks="Пользователи">
+            <column name="user_id" type="bigserial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(255)" remarks="Логин">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nickname" type="varchar(255)" remarks="Никнейм">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)" remarks="Никнейм">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)" remarks="Пароль">
+                <constraints nullable="false"/>
+            </column>
+            <column name="disabled" type="boolean" remarks="Пароль">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_expired" type="boolean" remarks="Пароль">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_locked" type="boolean" remarks="Пароль">
+                <constraints nullable="false"/>
+            </column>
+            <column name="credentials_expired" type="boolean" remarks="Пароль">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_user_roles_table" author="DemichevDA">
+        <createTable tableName="user_roles" schemaName="movies">
+            <column name="users_user_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_roles_pkey"/>
+            </column>
+            <column name="roles_role_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_roles_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet  id="addForeignKeyConstraint-userRole" author="DemichevDA"  >
+        <addForeignKeyConstraint  baseTableSchemaName="movies"
+                                  baseTableName = "user_roles"
+                                  baseColumnNames="users_user_id"
+                                  referencedTableSchemaName="movies"
+                                  referencedTableName="user"
+                                  referencedColumnNames="user_id"
+                                  constraintName="fk_user_role"
+        />
+        <addForeignKeyConstraint  baseTableSchemaName="movies"
+                                  baseTableName = "user_roles"
+                                  baseColumnNames="roles_role_id"
+                                  referencedTableSchemaName="movies"
+                                  referencedTableName="role"
+                                  referencedColumnNames="role_id"
+                                  constraintName="fk_role_user"
+        />
+    </changeSet>
+    <changeSet id="create_genre_movies_table" author="DemichevDA">
+        <createTable tableName="genre_movies" schemaName="movies">
+            <column name="genres_genre_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="genre_movies_pkey"/>
+            </column>
+            <column name="movies_movie_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="genre_movies_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet  id="addForeignKeyConstraint-genreMovie" author="DemichevDA"  >
+        <addForeignKeyConstraint  baseTableSchemaName="movies"
+                                  baseTableName = "genre_movies"
+                                  baseColumnNames="genres_genre_id"
+                                  referencedTableSchemaName="movies"
+                                  referencedTableName="genre"
+                                  referencedColumnNames="genre_id"
+                                  constraintName="fk_genre_movie"
+        />
+        <addForeignKeyConstraint  baseTableSchemaName="movies"
+                                  baseTableName = "genre_movies"
+                                  baseColumnNames="movies_movie_id"
+                                  referencedTableSchemaName="movies"
+                                  referencedTableName="movie"
+                                  referencedColumnNames="movie_id"
+                                  constraintName="fk_movie_genre"
+        />
+    </changeSet>
+
+    <changeSet id="create_actor_movies_table" author="DemichevDA">
+        <createTable tableName="actor_movies" schemaName="movies">
+            <column name="actors_actor_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="actor_movies_pkey"/>
+            </column>
+            <column name="movies_movie_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="actor_movies_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet  id="addForeignKeyConstraint-actorMovie" author="DemichevDA"  >
+        <addForeignKeyConstraint  baseTableSchemaName="movies"
+                                  baseTableName = "actor_movies"
+                                  baseColumnNames="actors_actor_id"
+                                  referencedTableSchemaName="movies"
+                                  referencedTableName="actor"
+                                  referencedColumnNames="actor_id"
+                                  constraintName="fk_actor_movie"
+        />
+        <addForeignKeyConstraint  baseTableSchemaName="movies"
+                                  baseTableName = "actor_movies"
+                                  baseColumnNames="movies_movie_id"
+                                  referencedTableSchemaName="movies"
+                                  referencedTableName="movie"
+                                  referencedColumnNames="movie_id"
+                                  constraintName="fk_movie_actor"
+        />
+    </changeSet>
+
+    <changeSet  id="addForeignKeyConstraint-movieDirector" author="DemichevDA"  >
+        <addForeignKeyConstraint  baseTableSchemaName="movies"
+                                  baseTableName = "movie"
+                                  baseColumnNames="director_id"
+                                  referencedTableSchemaName="movies"
+                                  referencedTableName="director"
+                                  referencedColumnNames="director_id"
+                                  constraintName="fk_director_movie"
+        />
+    </changeSet>
+</databaseChangeLog>
